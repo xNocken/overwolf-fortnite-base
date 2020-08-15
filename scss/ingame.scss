@@ -1,0 +1,13 @@
+main {
+  background-color: #333333;
+
+  .player-stats__entry {
+    color: white;
+    padding-bottom: 10px;
+    font-size: 20px;
+
+    div {
+      display: inline-block;
+    }
+  }
+}
