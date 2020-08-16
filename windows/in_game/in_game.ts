@@ -5,10 +5,11 @@ import { OWGamesEvents } from "../../odk-ts/ow-games-events";
 import { OWHotkeys } from "../../odk-ts/ow-hotkeys";
 import { interestingFeatures, hotkeys, windowNames } from "../../consts";
 import Player from '../../classes/Player';
+import Item from "../../classes/item";
 import events from './main';
 import WindowState = overwolf.windows.WindowState;
-import Item from "../../classes/item";
 import main from "./main";
+import Vector3 from '../../classes/Vector3';
 
 // The window displayed in-game while a Fortnite game is running.
 // It listens to all info events and to the game events listed in the consts.ts file
@@ -20,7 +21,7 @@ class InGame extends AppWindow {
   private _fortniteGameEventsListener: OWGamesEvents;
   private player: Player = new Player();
   private lastInventory: object = {};
-  private matchInfo: object = {};
+  private matchInfo = {};
   private phase: string = '';
 
   private constructor() {
@@ -53,18 +54,17 @@ class InGame extends AppWindow {
       if (eventName === 'inventory') {
         Object.keys(info.inventory).forEach((item: string) => {
           const index: number = parseInt(item.replace('item_', ''), 10)
-          
+
           this.onInventory(index, JSON.parse(info.inventory[`item_${index}`]));
         })
       }
 
       if (eventName === 'quickbar') {
         Object.keys(info.quickbar).forEach((item: string) => {
+          console.log(info);
           const index: number = parseInt(item.replace('quickbar_', ''), 10)
-          
-          if (info.quickbar[item]) {
-            this.onQuickbar(index, Boolean(info.quickbar[item]), JSON.parse(info.quickbar[item]).name);
-          }
+
+          this.onQuickbar(index, info.quickbar[item], info.quickbar[item] ? JSON.parse(info.quickbar[item]).name : null);
         })
       }
 
@@ -100,7 +100,7 @@ class InGame extends AppWindow {
     events.update(this.player, this.matchInfo, this.phase);
   }
 
-  private onLocation(location: object) {
+  private onLocation(location: Vector3) {
     this.player.location = location;
   }
 
@@ -108,7 +108,7 @@ class InGame extends AppWindow {
     this.phase = phase;
   }
 
-  private onSelectSlot(selectData: Object) {
+  private onSelectSlot(selectData) {
     this.player.selected_slot = selectData;
   }
 
@@ -139,10 +139,14 @@ class InGame extends AppWindow {
   }
 
   private onInventory(index: number, data) {
-
     if (data) {
       this.lastInventory[data.name] = index;
-      this.player.inventory[index] = new Item(data.name, parseInt(data.count), parseInt(data.ammo), parseInt(data.rarity))
+      if (this.player.inventory[index] && this.player.inventory[index].name === data.name) {
+        this.player.inventory[index].count = data.count;
+        this.player.inventory[index].ammo = data.ammo;
+      } else {
+        this.player.inventory[index] = new Item(data.name, parseInt(data.count), parseInt(data.ammo), parseInt(data.rarity))
+      }
     } else {
       this.player.inventory[index] = null;
     }
@@ -150,6 +154,20 @@ class InGame extends AppWindow {
 
   // Special events will be highlighted in the event log
   private onNewEvents(e) {
+    e.events.forEach((event) => {
+      if (event.name === 'killed') {
+        if (main.onKill) {
+          main.onKill(this.player, event.data, this.matchInfo['kills'])
+        }
+      }
+
+      if (event.name === 'killer') {
+        if (main.onKill) {
+          main.onDeath(this.player, event.data)
+        }
+      }
+    });
+    console.log(e);
   }
 
   // Displays the toggle minimize/restore hotkey in the window header

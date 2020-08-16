@@ -1,4 +1,5 @@
 import Item from './Item';
+import Vector3 from './Vector3';
 
 class Player {
     public name: string = '';
@@ -7,16 +8,12 @@ class Player {
     public health: number = 0;
     public shield: number = 0;
     public inventory: Array<Item> = [];
-    public selected_slot: Object = {
+    public selected_slot = {
         isPrimary: false,
-        slot: 0,
+        slot: '0',
     };
     public selectedMaterial: number = 0;
-    public location: object = {
-        x: 0,
-        y: 0,
-        z: 0,
-    }
+    public location: Vector3 = new Vector3();
 
     public getMaterialCount(materialType: string): number {
         let count: number = 0;
@@ -25,7 +22,7 @@ class Player {
             if (item && item.name == `${materialType}ItemData`) {
                 count = item.count;
             }
-        }); 
+        });
 
         return count;
     }

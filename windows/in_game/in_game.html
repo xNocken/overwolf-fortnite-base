@@ -64,11 +64,38 @@
   <!-- --------------------------------- Main -------------------------------- -->
   <main>
     <div class="player-stats">
-      <div class="player-stats__entry">Health: <div id="health"></div></div>
-      <div class="player-stats__entry">Shield: <div id="shield"></div></div>
-      <div class="player-stats__entry">Wood: <div id="wood"></div></div>
-      <div class="player-stats__entry">Brick: <div id="brick"></div></div>
-      <div class="player-stats__entry">Metal: <div id="metal"></div></div>
+      <div class="player-stats__entry">Player: </div>
+      <div class="player-stats__entry player-stats__entry--gap">Name: <div class="inline" id="name">Name</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Health: <div class="inline" id="health">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Shield: <div class="inline" id="shield">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Selected slot: <div class="inline" id="selected-slot">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Selected material: <div class="inline" id="selected-material">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Accuracy: <div class="inline" id="accuracy">0</div></div>
+
+      <div class="player-stats__entry">Materials: </div>
+      <div class="player-stats__entry player-stats__entry--gap">Wood: <div class="inline" id="wood">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Brick: <div class="inline" id="brick">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Metal: <div class="inline" id="metal">0</div></div>
+
+      <div class="player-stats__entry">Position: </div>
+      <div class="player-stats__entry player-stats__entry--gap">X: <div class="inline" id="x">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Y: <div class="inline" id="y">0</div></div>
+      <div class="player-stats__entry player-stats__entry--gap">Z: <div class="inline" id="z">0</div></div>
+
+      <div class="player-stats__entry">Hotbar: </div>
+      <div id="hotbar"></div>
+
+      <div class="player-stats__entry">Inventory: </div>
+      <div id="inventory" class="player-stats__entry player-stats__entry--gap"></div>
+
+      <div class="player-stats__entry">Match info: </div>
+      <div id="match-info" class="player-stats__entry player-stats__entry--gap"></div>
+
+      <div class="player-stats__entry">Kills: </div>
+      <div id="kill-list" class="player-stats__entry player-stats__entry--scroll-list"></div>
+
+      <div class="player-stats__entry">Deaths: </div>
+      <div id="deaths" class="player-stats__entry player-stats__entry--scroll-list"></div>
     </div>
   </main>
 

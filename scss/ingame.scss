@@ -1,13 +1,28 @@
 main {
   background-color: #333333;
 
-  .player-stats__entry {
-    color: white;
-    padding-bottom: 10px;
-    font-size: 20px;
+  .player-stats {
+    &__entry {
+      color: white;
+      padding-bottom: 10px;
+      font-size: 20px;
 
-    div {
-      display: inline-block;
+      &--scroll-list {
+        height: 50px;
+        overflow-y: scroll;
+      }
+
+      &--gap {
+        margin-left: 30px;
+
+        &-big {
+          margin-left: 60px;
+        }
+      }
     }
   }
+}
+
+.inline {
+  display: inline-block;
 }
