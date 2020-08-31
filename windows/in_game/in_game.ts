@@ -141,6 +141,7 @@ class InGame extends AppWindow {
   private onInventory(index: number, data) {
     if (data) {
       this.lastInventory[data.name] = index;
+
       if (this.player.inventory[index] && this.player.inventory[index].name === data.name) {
         this.player.inventory[index].count = data.count;
         this.player.inventory[index].ammo = data.ammo;
@@ -154,6 +155,7 @@ class InGame extends AppWindow {
 
   // Special events will be highlighted in the event log
   private onNewEvents(e) {
+    console.log(JSON.stringify(e));
     e.events.forEach((event) => {
       if (event.name === 'killed') {
         if (main.onKill) {
@@ -161,13 +163,42 @@ class InGame extends AppWindow {
         }
       }
 
+      if (event.name === 'matchStart') {
+        if (main.onStart) {
+          main.onStart(this.player);
+        }
+      }
+
       if (event.name === 'killer') {
-        if (main.onKill) {
-          main.onDeath(this.player, event.data)
+        if (main.onDeath) {
+          main.onDeath(this.player, event.data);
+        }
+      }
+
+      if (event.name === 'revived') {
+        if (main.onRevived) {
+          main.onRevived(this.player);
+        }
+      }
+
+      if (event.name === 'team') {
+        if (main.onTeam) {
+          main.onTeam(this.player, JSON.parse(event.data.value.map((teammate) => teammate.player)))
+        }
+      }
+
+      if (event.name === 'phase') {
+        if (main.onPhase) {
+          main.onPhase(this.player, event.data.phase);
+        }
+      }
+
+      if (event.name === 'knockedout') {
+        if (main.onKnockedDown) {
+          main.onKnockedDown(this.player, event.data);
         }
       }
     });
-    console.log(e);
   }
 
   // Displays the toggle minimize/restore hotkey in the window header
@@ -193,26 +224,6 @@ class InGame extends AppWindow {
     }
 
     OWHotkeys.onHotkeyDown(hotkeys.toggle, toggleInGameWindow);
-  }
-
-  // Appends a new line to the specified log
-  private logLine(log: HTMLElement, data, highlight) {
-    console.log(`${log.id}:`);
-    console.log(data);
-    const line = document.createElement('pre');
-    line.textContent = JSON.stringify(data);
-
-    if (highlight) {
-      line.className = 'highlight';
-    }
-
-    const shouldAutoScroll = (log.scrollTop + log.offsetHeight) > (log.scrollHeight - 10);
-
-    log.appendChild(line);
-
-    if (shouldAutoScroll) {
-      log.scrollTop = log.scrollHeight;
-    }
   }
 }
 

@@ -1,8 +1,9 @@
 main {
   background-color: #333333;
+  font-family: "Roboto";
 
   .player-stats {
-    &__entry {
+      &__entry {
       color: white;
       padding-bottom: 10px;
       font-size: 20px;

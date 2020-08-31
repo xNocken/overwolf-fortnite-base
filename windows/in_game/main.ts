@@ -3,6 +3,30 @@ import standard from './standard';
 
 import * as $ from 'jquery';
 
+const onStart: Function = (player: Player) => {
+  console.log('start ', player.name);
+};
+
+const onRevived: Function = (player: Player) => {
+  console.log('Revived ', player.name);
+};
+
+const onTeam: Function = (player: Player, teams: Array<String>) => {
+  console.log('Teammmates:', teams.join(', '));
+};
+
+const onPhase: Function = (player: Player, phase: String) => {
+  console.log('Phase:', phase);
+};
+
+const onEnd: Function = (player: Player, matchInfo: Object, placement: Number) => {
+  console.log('Matchend:', `${placement}`);
+};
+
+const onKnockedDown: Function = (player: Player, killer: String) => {
+  console.log('Knocked down:', killer);
+};
+
 const onDeath: Function = (player: Player, name) => {
   $('#deaths').append(`<div class="player-stats__entry player-stats__entry--gap">${name}</div>`)
 };
@@ -66,5 +90,11 @@ export default {
   ...standard,
   onKill,
   onDeath,
+  onTeam,
+  onStart,
+  onRevived,
+  onKnockedDown,
+  onEnd,
+  onPhase,
   update,
 };
